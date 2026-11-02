@@ -841,13 +841,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 8px;
   width: 100%;
   aspect-ratio: 4 / 5;
   max-height: 46vh;
-  background: #1a1210;
+  padding: 0 16px 18px;
+  background:
+    linear-gradient(to top, rgba(26, 18, 16, 0.72), rgba(26, 18, 16, 0.08) 42%, transparent 62%),
+    url('/songs/wagon-wheel.jpg') 50% 42% / cover no-repeat;
   color: #f6efe4;
+}
+
+.camera-well svg,
+.camera-well span {
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.65));
 }
 
 .camera-well svg {
