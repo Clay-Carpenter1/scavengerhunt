@@ -48,8 +48,11 @@ function nextRotation(
   return current + extraTurns * 360 + delta
 }
 
-function spinEase(t: number) {
-  return 1 - Math.pow(1 - t, 3)
+function rotationOf(element: HTMLElement) {
+  const transform = getComputedStyle(element).transform
+  if (!transform || transform === 'none') return 0
+  const matrix = new DOMMatrix(transform)
+  return (Math.atan2(matrix.b, matrix.a) * 180) / Math.PI
 }
 
 export function Wheel({
@@ -62,29 +65,29 @@ export function Wheel({
   onSpinStart,
   onSpinEnd,
 }: WheelProps) {
-  const [rotation, setRotation] = useState(0)
   const [animating, setAnimating] = useState(false)
   const [landed, setLanded] = useState(false)
   const ended = useRef(false)
   const autoStarted = useRef(false)
   const rotationRef = useRef(0)
-  const frameRef = useRef(0)
+  const discRef = useRef<HTMLDivElement>(null)
+  const spinAnimRef = useRef<Animation | null>(null)
   const timeoutRef = useRef(0)
 
   const spinMs = durationMs
-  const windUpMs = 180
   const settleMs = 400
   const landHoldMs = 1200
 
   useEffect(() => {
     return () => {
-      window.cancelAnimationFrame(frameRef.current)
+      spinAnimRef.current?.cancel()
       window.clearTimeout(timeoutRef.current)
     }
   }, [])
 
   const spin = useCallback(() => {
-    if (disabled || animating || slices.length === 0) return
+    const disc = discRef.current
+    if (!disc || disabled || animating || slices.length === 0) return
     const targetIndex = slices.findIndex((slice) => slice.id === targetId)
     if (targetIndex < 0) return
 
@@ -94,37 +97,63 @@ export function Wheel({
     setAnimating(true)
     buzz(18)
 
+    const idle = disc.parentElement
+    if (idle instanceof HTMLElement) {
+      const tilt = rotationOf(idle)
+      idle.style.animation = 'none'
+      idle.style.transform = `rotate(${tilt}deg)`
+      idle.animate(
+        [{ transform: `rotate(${tilt}deg)` }, { transform: 'none' }],
+        { duration: 420, easing: 'ease-out', fill: 'forwards' },
+      )
+      window.requestAnimationFrame(() => {
+        idle.style.animation = ''
+        idle.style.transform = ''
+      })
+    }
+
     const from = rotationRef.current
     const to = nextRotation(from, targetIndex, slices.length)
+    rotationRef.current = to
 
     const finish = () => {
       if (ended.current) return
       ended.current = true
-      rotationRef.current = to
-      setRotation(to)
       setAnimating(false)
       onSpinEnd?.()
     }
 
-    const play = () => {
-      const startedAt = performance.now()
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - startedAt) / spinMs)
-        const next = from + (to - from) * spinEase(t)
-        rotationRef.current = next
-        setRotation(next)
-        if (t < 1) {
-          frameRef.current = window.requestAnimationFrame(tick)
-          return
-        }
-        setLanded(true)
-        buzz([28, 70, 48, 90, 110])
-        timeoutRef.current = window.setTimeout(finish, settleMs + landHoldMs)
-      }
-      frameRef.current = window.requestAnimationFrame(tick)
+    const land = () => {
+      setLanded(true)
+      buzz([28, 70, 48, 90, 110])
+      timeoutRef.current = window.setTimeout(finish, settleMs + landHoldMs)
     }
 
-    timeoutRef.current = window.setTimeout(play, windUpMs)
+    spinAnimRef.current?.cancel()
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduceMotion) {
+      disc.style.transform = `rotate(${to}deg)`
+      land()
+      return
+    }
+
+    const animation = disc.animate(
+      [
+        { transform: `rotate(${from}deg)` },
+        { transform: `rotate(${to}deg)` },
+      ],
+      {
+        duration: spinMs,
+        easing: 'cubic-bezier(0.18, 0.45, 0.22, 1)',
+        fill: 'forwards',
+      },
+    )
+    spinAnimRef.current = animation
+    animation.onfinish = () => {
+      if (spinAnimRef.current !== animation) return
+      land()
+    }
   }, [
     animating,
     disabled,
@@ -135,7 +164,6 @@ export function Wheel({
     slices,
     spinMs,
     targetId,
-    windUpMs,
   ])
 
   useEffect(() => {
@@ -159,10 +187,7 @@ export function Wheel({
         <span />
       </div>
       <div className="wheel__idle">
-        <div
-          className="wheel__disc"
-          style={{ transform: `rotate(${rotation}deg)` }}
-        >
+        <div ref={discRef} className="wheel__disc">
           <svg viewBox="0 0 200 200" width={size} height={size} role="img" aria-label="Spin wheel">
             {slices.map((slice, index) => {
               const start = index * sliceAngle

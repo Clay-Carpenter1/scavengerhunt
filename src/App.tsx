@@ -160,6 +160,7 @@ function App() {
               theme: 'warm',
             }}
             eyebrow={`${hunt.choice.resultEyebrow} ${huntState.selectedChoice.label.toLowerCase()}`}
+            camera={huntState.selectedChoice.camera}
             onDone={() => {
               setDirection('forward')
               huntState.completeChoice()

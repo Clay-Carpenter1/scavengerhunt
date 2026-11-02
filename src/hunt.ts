@@ -31,6 +31,7 @@ export type ChoiceOption = {
   afterClue: string
   afterNote: string
   icon?: ChoiceIcon
+  camera?: boolean
 }
 
 /**
@@ -42,8 +43,14 @@ export const hunt = {
   yourName: 'Me',
   siteTitle: "Tonight's itinerary",
   introEyebrow: 'Classified, kind of',
-  introTitle: "Tonight's itinerary",
   introLine: 'The wheel decides. You just spin.',
+  rulesTitle: 'Rules',
+  rules: [
+    'You spin. Then you actually go.',
+    'Follow Rule #3.',
+    'Follow Rule #1.',
+    'No Skipping, No Looking Ahead.',
+  ],
   introButton: "Spin tonight's first stop",
   resultEyebrow: 'The wheel has spoken',
   doneButton: 'We did it',
@@ -121,6 +128,7 @@ export const hunt = {
         icon: 'photo' as const,
         clue: 'Take a picture before we leave.',
         note: 'Something we can keep from tonight.',
+        camera: true,
         afterTitle: 'Utter silence',
         afterClue: 'Take the picture. Then no talking while we go to the next destination.',
         afterNote: 'That is the last sound we make until we get there.',
@@ -135,6 +143,7 @@ export const hunt = {
       clue: "Go to Andy's and get a Butter Pecan Concrete.",
       note: "Dessert before the plan. That's the rule tonight.",
       theme: 'playful',
+      image: '/andys.png',
     },
     {
       id: 'memory',
