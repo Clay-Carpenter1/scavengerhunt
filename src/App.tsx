@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react'
 import { ChoiceGrid } from './components/ChoiceGrid'
+import { DoneScreen } from './components/DoneScreen'
 import { Intro } from './components/Intro'
 import { ResultCard } from './components/ResultCard'
+import { SongSlot } from './components/SongSlot'
+import { Stage, type NavDirection } from './components/Stage'
 import { Wheel } from './components/Wheel'
 import { hunt, themeMotion } from './hunt'
 import { useHunt } from './hooks/useHunt'
@@ -28,25 +31,33 @@ function Brand({ onReset }: { onReset: () => void }) {
 function App() {
   const huntState = useHunt()
   const [spinLocked, setSpinLocked] = useState(false)
+  const [pageLocked, setPageLocked] = useState(false)
+  const [direction, setDirection] = useState<NavDirection>('forward')
   const stop = huntState.stop
+  const locked = spinLocked || pageLocked
 
   const startNight = () => {
     setSpinLocked(false)
+    setDirection('forward')
     huntState.begin()
   }
 
   const finishStop = () => {
     setSpinLocked(false)
+    setPageLocked(false)
+    setDirection('forward')
     huntState.completeStop()
   }
 
   const goBack = () => {
     setSpinLocked(false)
+    setDirection('back')
     huntState.goBack()
   }
 
   const goForward = () => {
     setSpinLocked(false)
+    setDirection('forward')
     huntState.goForward()
   }
 
@@ -60,7 +71,7 @@ function App() {
               type="button"
               className="back"
               onClick={goBack}
-              disabled={spinLocked}
+              disabled={locked}
             >
               ← Back
             </button>
@@ -73,7 +84,7 @@ function App() {
               type="button"
               className="back back--forward"
               onClick={goForward}
-              disabled={spinLocked}
+              disabled={locked}
             >
               Forward →
             </button>
@@ -81,7 +92,27 @@ function App() {
         </div>
       </header>
 
-      <main className="stage">
+      {huntState.phase === 'lastChoice' ? (
+        <main className="stage stage--plain">
+          <SongSlot
+            onPick={(song) => {
+              setSpinLocked(false)
+              setDirection('forward')
+              huntState.pickLastChoice(song)
+            }}
+            onSpinStart={() => setSpinLocked(true)}
+          />
+        </main>
+      ) : huntState.phase === 'done' ? (
+        <main className="stage stage--plain">
+          <DoneScreen />
+        </main>
+      ) : (
+      <Stage
+        stageKey={`${huntState.phase}:${huntState.stepIndex}:${huntState.selectedChoice?.id ?? ''}:${huntState.selectedLastChoice?.id ?? ''}`}
+        direction={direction}
+        onLock={setPageLocked}
+      >
         {huntState.phase === 'intro' && <Intro onStart={startNight} />}
 
         {huntState.phase === 'wheel' && stop && (
@@ -91,9 +122,12 @@ function App() {
               slices={huntState.slices}
               targetId={stop.id}
               durationMs={themeMotion[huntState.theme].spinMs}
-              disabled={spinLocked}
+              disabled={locked}
               onSpinStart={() => setSpinLocked(true)}
-              onSpinEnd={huntState.landSpin}
+              onSpinEnd={() => {
+                setDirection('forward')
+                huntState.landSpin()
+              }}
             />
           </section>
         )}
@@ -108,7 +142,10 @@ function App() {
             title={hunt.choice.title}
             lede={hunt.choice.lede}
             options={hunt.choice.options}
-            onPick={huntState.pickChoice}
+            onPick={(option) => {
+              setDirection('forward')
+              huntState.pickChoice(option)
+            }}
           />
         )}
 
@@ -123,17 +160,10 @@ function App() {
               theme: 'warm',
             }}
             eyebrow={`${hunt.choice.resultEyebrow} ${huntState.selectedChoice.label.toLowerCase()}`}
-            onDone={huntState.completeChoice}
-          />
-        )}
-
-        {huntState.phase === 'lastChoice' && (
-          <ChoiceGrid
-            eyebrow={hunt.lastChoice.eyebrow}
-            title={hunt.lastChoice.title}
-            lede={hunt.lastChoice.lede}
-            options={hunt.lastChoice.options}
-            onPick={huntState.pickLastChoice}
+            onDone={() => {
+              setDirection('forward')
+              huntState.completeChoice()
+            }}
           />
         )}
 
@@ -141,24 +171,24 @@ function App() {
           <ResultCard
             stop={{
               id: huntState.selectedLastChoice.id,
-              wheelLabel: huntState.selectedLastChoice.label,
-              title: huntState.selectedLastChoice.afterTitle,
-              clue: huntState.selectedLastChoice.afterClue,
-              note: huntState.selectedLastChoice.afterNote,
+              wheelLabel: huntState.selectedLastChoice.title,
+              title: huntState.selectedLastChoice.title,
+              clue: hunt.lastChoice.afterClue,
+              note: hunt.lastChoice.afterNote,
               theme: 'finale',
+              image: huntState.selectedLastChoice.image,
+              caption: huntState.selectedLastChoice.artist,
             }}
-            eyebrow={`${hunt.lastChoice.resultEyebrow} ${huntState.selectedLastChoice.label.toLowerCase()}`}
-            onDone={huntState.completeLastChoice}
+            eyebrow={hunt.lastChoice.resultEyebrow}
+            onDone={() => {
+              setDirection('forward')
+              huntState.completeLastChoice()
+            }}
           />
         )}
 
-        {huntState.phase === 'done' && (
-          <section className="panel result">
-            <h1>{hunt.doneTitle}</h1>
-            <p className="lede serif">{hunt.doneLine}</p>
-          </section>
-        )}
-      </main>
+      </Stage>
+      )}
     </div>
   )
 }

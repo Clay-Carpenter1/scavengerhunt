@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { hunt, type ChoiceOption, type ThemeName } from '../hunt'
+import { hunt, type ChoiceOption, type SongCard, type ThemeName } from '../hunt'
 import { buildSlices } from '../slices'
 import {
   clearHunt,
@@ -38,8 +38,8 @@ export function useHunt() {
 
   const stop = hunt.stops[stepIndex]
   const selectedChoice = hunt.choice.options.find((option) => option.id === choiceId)
-  const selectedLastChoice = hunt.lastChoice.options.find(
-    (option) => option.id === lastChoiceId,
+  const selectedLastChoice = hunt.lastChoice.songs.find(
+    (song) => song.id === lastChoiceId,
   )
   const theme: ThemeName =
     phase === 'intro'
@@ -115,10 +115,10 @@ export function useHunt() {
     }))
   }, [])
 
-  const pickLastChoice = useCallback((option: ChoiceOption) => {
+  const pickLastChoice = useCallback((song: SongCard) => {
     setState((current) => ({
       ...current,
-      lastChoiceId: option.id,
+      lastChoiceId: song.id,
       phase: 'lastChoiceResult',
     }))
   }, [])
@@ -160,7 +160,7 @@ export function useHunt() {
     }
 
     if (phase === 'lastChoice') {
-      pickLastChoice(selectedLastChoice ?? hunt.lastChoice.options[0])
+      pickLastChoice(selectedLastChoice ?? hunt.lastChoice.songs[0])
       return
     }
 

@@ -82,9 +82,75 @@
 }
 
 .stage {
-  display: flex;
+  position: relative;
+  display: grid;
   flex: 1;
   align-items: center;
+  width: 100%;
+}
+
+.stage--plain {
+  display: flex;
+  overflow: auto;
+  align-items: flex-start;
+}
+
+.stage__page {
+  grid-area: 1 / 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  transform: none;
+}
+
+.stage__page.is-leave {
+  pointer-events: none;
+  z-index: 2;
+}
+
+.stage__page.is-enter {
+  z-index: 1;
+}
+
+.stage__page.is-enter-forward {
+  animation: page-in-forward 500ms cubic-bezier(0.16, 0.84, 0.32, 1);
+}
+
+.stage__page.is-enter-back {
+  animation: page-in-back 500ms cubic-bezier(0.16, 0.84, 0.32, 1);
+}
+
+.stage__page.is-leave-forward {
+  animation: page-out-forward 420ms cubic-bezier(0.4, 0, 0.7, 0.2) forwards;
+}
+
+.stage__page.is-leave-back {
+  animation: page-out-back 420ms cubic-bezier(0.4, 0, 0.7, 0.2) forwards;
+}
+
+.stage__page.is-instant {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.stage.is-paging .stage__page {
+  pointer-events: none;
+}
+
+.stage__page .panel {
+  animation: none;
+}
+
+.stage__page.is-leave .panel,
+.stage__page.is-leave .polaroid,
+.stage__page.is-leave .choice-card,
+.stage__page.is-leave .result__copy > *,
+.stage__page.is-leave .result__photo--svg,
+.stage__page.is-leave .song-slot.is-landed .song-slot__window,
+.stage__page.is-leave .song-slot.is-landed .song-slot__pointer {
+  animation: none;
 }
 
 .panel {
@@ -94,7 +160,7 @@
   align-items: center;
   text-align: center;
   gap: 16px;
-  animation: rise 480ms ease both;
+  animation: rise 560ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
 }
 
 .eyebrow {
@@ -134,6 +200,9 @@
 
 .choice-card {
   appearance: none;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   border: 1px solid var(--line);
   border-radius: 22px;
   min-height: 168px;
@@ -149,10 +218,56 @@
   box-shadow: 0 10px 24px color-mix(in srgb, var(--ink) 8%, transparent);
   cursor: pointer;
   touch-action: manipulation;
+  animation: choice-pop 520ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+}
+
+.choice-grid .choice-card:nth-child(1) {
+  animation-delay: 80ms;
+}
+
+.choice-grid .choice-card:nth-child(2) {
+  animation-delay: 160ms;
 }
 
 .choice-card:active {
   transform: scale(0.98);
+}
+
+.choice-card__art {
+  position: absolute;
+  inset: 14px 10px 58px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.choice-card__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 18%,
+    color-mix(in srgb, var(--card) 55%, transparent) 52%,
+    color-mix(in srgb, var(--card) 88%, var(--accent)) 78%
+  );
+}
+
+.choice-card__icon {
+  width: 86%;
+  height: 86%;
+  max-width: 104px;
+  max-height: 104px;
+  overflow: visible;
+  color: var(--accent);
+  opacity: 0.45;
+}
+
+.choice-card__label,
+.choice-card__hint {
+  position: relative;
+  z-index: 1;
 }
 
 .choice-card__label {
@@ -164,6 +279,219 @@
 .choice-card__hint {
   font-size: 0.88rem;
   color: color-mix(in srgb, var(--card-ink) 68%, transparent);
+}
+
+.song-pick {
+  gap: 12px;
+  animation: none;
+}
+
+.done-screen {
+  gap: 18px;
+  animation: none;
+  padding-top: 8px;
+}
+
+.done-photos {
+  position: relative;
+  width: min(100%, 17.5rem);
+  aspect-ratio: 4 / 5;
+}
+
+.done-photos__frame {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 12px 12px 16px;
+  background: #f6efe4;
+  border-radius: 8px;
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--ink) 28%, transparent);
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  transition:
+    opacity 420ms ease,
+    transform 420ms ease;
+  pointer-events: none;
+}
+
+.done-photos__frame.is-on {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  z-index: 1;
+}
+
+.done-photos__frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #1a1210;
+}
+
+.done-photos__frame[data-song='beauty-and-a-beat'] img {
+  object-position: 38% 18%;
+}
+
+.done-photos__frame[data-song='lonely-east-texas'] img {
+  object-position: 50% 12%;
+}
+
+.done-photos__frame[data-song='wagon-wheel'] img {
+  object-position: 50% 42%;
+}
+
+.done-photos__frame[data-song='five-to-nine'] img {
+  object-position: 48% 22%;
+}
+
+.done-photos__frame[data-song='house-again'] img {
+  object-position: 50% 58%;
+}
+
+.done-photos__frame:nth-child(1).is-on {
+  transform: translateY(0) rotate(-2.4deg) scale(1);
+}
+
+.done-photos__frame:nth-child(2).is-on {
+  transform: translateY(0) rotate(2.1deg) scale(1);
+}
+
+.done-photos__frame:nth-child(3).is-on {
+  transform: translateY(0) rotate(-1.2deg) scale(1);
+}
+
+.done-photos__frame:nth-child(4).is-on {
+  transform: translateY(0) rotate(2.6deg) scale(1);
+}
+
+.done-photos__frame:nth-child(5).is-on {
+  transform: translateY(0) rotate(-1.8deg) scale(1);
+}
+
+.song-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: calc(100% + 40px);
+  margin-inline: -20px;
+}
+
+.song-slot__pointer {
+  width: 18px;
+  height: 14px;
+  display: grid;
+  place-items: start center;
+}
+
+.song-slot__pointer span {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 12px solid var(--accent);
+  filter: drop-shadow(0 4px 6px color-mix(in srgb, var(--ink) 22%, transparent));
+}
+
+.song-slot__window {
+  width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+.song-slot.is-spinning .song-slot__window,
+.song-slot.is-landed .song-slot__window {
+  cursor: default;
+}
+
+.song-slot__track {
+  display: flex;
+  align-items: stretch;
+  will-change: transform;
+}
+
+.song-slot.is-spinning .song-slot__track {
+  filter: blur(0.45px);
+}
+
+.song-slot.is-landed .song-slot__window {
+  animation: land-pulse 900ms ease;
+}
+
+.song-slot.is-landed .song-slot__pointer {
+  animation: pointer-pop 480ms ease;
+}
+
+.song-slot__card {
+  flex: 0 0 auto;
+  width: min(56vw, 260px);
+  padding: 12px 12px 16px;
+  background: #f6efe4;
+  color: #3a1522;
+  border-radius: 8px;
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--ink) 28%, transparent);
+  text-align: left;
+}
+
+.song-slot__card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: #1a1210;
+}
+
+.song-slot__card[data-song='beauty-and-a-beat'] img {
+  object-position: 38% 18%;
+}
+
+.song-slot__card[data-song='lonely-east-texas'] img {
+  object-position: 50% 12%;
+}
+
+.song-slot__card[data-song='wagon-wheel'] img {
+  object-position: 50% 42%;
+}
+
+.song-slot__card[data-song='five-to-nine'] img {
+  object-position: 48% 22%;
+}
+
+.song-slot__card[data-song='house-again'] img {
+  object-position: 50% 58%;
+}
+
+.song-slot__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 12px;
+}
+
+.song-slot__title {
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.song-slot__artist {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, #3a1522 70%, transparent);
+}
+
+.song-slot__hint {
+  font-size: 0.88rem;
+  color: var(--muted);
 }
 
 .lede,
@@ -242,6 +570,7 @@
 }
 
 .wheel {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -324,13 +653,39 @@
   stroke-width: 1.2;
 }
 
-.wheel:not(.is-spinning) .wheel__idle {
+.wheel:not(.is-spinning):not(.is-landed) .wheel__idle {
   animation: idle-tilt 4.8s ease-in-out infinite;
 }
 
 .wheel--compact:not(.is-spinning) .wheel__idle,
 .wheel.is-spinning .wheel__idle {
   animation: none;
+}
+
+.wheel.is-spinning .wheel__disc {
+  filter: blur(0.35px);
+}
+
+.wheel.is-landed .wheel__idle {
+  animation: land-pulse 900ms ease;
+}
+
+.wheel.is-landed .wheel__disc {
+  filter: none;
+}
+
+.wheel.is-landed .wheel__pointer {
+  animation: pointer-pop 480ms ease;
+}
+
+.wheel.is-landed::after {
+  content: '';
+  position: absolute;
+  inset: 12% 8% 28%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent), transparent 68%);
+  animation: land-flash 900ms ease both;
 }
 
 .result,
@@ -343,6 +698,117 @@
   border-radius: var(--radius);
   padding: 28px 22px 22px;
   box-shadow: 0 20px 50px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.result--prize {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  gap: 18px;
+}
+
+.result--prize .result__copy {
+  width: 100%;
+  background: var(--card);
+  color: var(--card-ink);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 20px 18px;
+  box-shadow: 0 20px 50px color-mix(in srgb, var(--ink) 12%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.result__copy > * {
+  animation: rise 520ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
+}
+
+.result__copy > *:nth-child(1) {
+  animation-delay: 420ms;
+}
+
+.result__copy > *:nth-child(2) {
+  animation-delay: 520ms;
+}
+
+.result__copy > *:nth-child(3) {
+  animation-delay: 640ms;
+}
+
+.result__copy > *:nth-child(4) {
+  animation-delay: 760ms;
+}
+
+.result__copy > *:nth-child(5) {
+  animation-delay: 900ms;
+}
+
+.result--prize .result__copy > *:nth-child(1) {
+  animation-delay: 720ms;
+}
+
+.result--prize .result__copy > *:nth-child(2) {
+  animation-delay: 840ms;
+}
+
+.result--prize .result__copy > *:nth-child(3) {
+  animation-delay: 960ms;
+}
+
+.result--prize .result__copy > *:nth-child(4) {
+  animation-delay: 1080ms;
+}
+
+.result--prize .result__copy > *:nth-child(5) {
+  animation-delay: 1200ms;
+}
+
+.polaroid {
+  width: min(100%, 22rem);
+  margin: 0;
+  padding: 14px 14px 18px;
+  background: #f6efe4;
+  box-shadow:
+    0 22px 48px color-mix(in srgb, var(--ink) 22%, transparent),
+    0 2px 0 color-mix(in srgb, #fff 70%, transparent) inset;
+  animation: polaroid-drop 900ms cubic-bezier(0.18, 0.9, 0.22, 1.12) both;
+}
+
+.polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 46vh;
+  object-fit: cover;
+  background: #1a1210;
+}
+
+.polaroid figcaption {
+  margin-top: 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: #3a1522;
+}
+
+.polaroid--memory {
+  animation-name: polaroid-drop-left;
+}
+
+.polaroid--memory img {
+  object-position: 32% 18%;
+}
+
+.polaroid--hers {
+  animation-name: polaroid-drop-right;
+}
+
+.polaroid--hers img {
+  object-position: 50% 28%;
 }
 
 .result__photo {
@@ -358,6 +824,10 @@
   max-height: none;
   object-fit: contain;
   width: min(100%, 14rem);
+}
+
+.result__photo--svg.is-glowing {
+  animation: pumpkin-glow 2.4s ease-in-out infinite;
 }
 
 .result .eyebrow,
@@ -444,6 +914,43 @@
   }
 }
 
+@keyframes page-in-forward {
+  from {
+    opacity: 0.35;
+    transform: translateX(18%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes page-in-back {
+  from {
+    opacity: 0.35;
+    transform: translateX(-18%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes page-out-forward {
+  to {
+    opacity: 0;
+    transform: translateX(-16%);
+  }
+}
+
+@keyframes page-out-back {
+  to {
+    opacity: 0;
+    transform: translateX(16%);
+  }
+}
+
+
 @keyframes idle-tilt {
   0%,
   100% {
@@ -451,6 +958,97 @@
   }
   50% {
     transform: rotate(5deg);
+  }
+}
+
+@keyframes polaroid-drop-left {
+  from {
+    opacity: 0;
+    transform: translateY(-48px) rotate(-14deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-3.4deg) scale(1);
+  }
+}
+
+@keyframes polaroid-drop-right {
+  from {
+    opacity: 0;
+    transform: translateY(-48px) rotate(12deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(2.6deg) scale(1);
+  }
+}
+
+@keyframes polaroid-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) rotate(-8deg) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2deg) scale(1);
+  }
+}
+
+@keyframes choice-pop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes land-pulse {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.045);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pointer-pop {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes land-flash {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes pumpkin-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px rgba(255, 176, 70, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 18px rgba(255, 196, 90, 0.7));
+    transform: scale(1.03);
   }
 }
 
@@ -463,8 +1061,18 @@
 @media (prefers-reduced-motion: reduce) {
   .panel,
   .confetti span,
-  .wheel:not(.is-spinning) .wheel__idle {
+  .wheel:not(.is-spinning) .wheel__idle,
+  .polaroid,
+  .choice-card,
+  .result__copy > *,
+  .result__photo--svg.is-glowing,
+  .wheel.is-landed .wheel__idle,
+  .wheel.is-landed .wheel__pointer,
+  .wheel.is-landed::after,
+  .stage__page {
     animation: none;
+    opacity: 1;
+    transform: none;
   }
 }
 

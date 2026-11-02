@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { buzz } from '../buzz'
 import type { WheelSlice } from '../slices'
 
 type WheelProps = {
@@ -63,6 +64,7 @@ export function Wheel({
 }: WheelProps) {
   const [rotation, setRotation] = useState(0)
   const [animating, setAnimating] = useState(false)
+  const [landed, setLanded] = useState(false)
   const ended = useRef(false)
   const autoStarted = useRef(false)
   const rotationRef = useRef(0)
@@ -72,6 +74,7 @@ export function Wheel({
   const spinMs = durationMs
   const windUpMs = 180
   const settleMs = 400
+  const landHoldMs = 1200
 
   useEffect(() => {
     return () => {
@@ -87,7 +90,9 @@ export function Wheel({
 
     ended.current = false
     onSpinStart?.()
+    setLanded(false)
     setAnimating(true)
+    buzz(18)
 
     const from = rotationRef.current
     const to = nextRotation(from, targetIndex, slices.length)
@@ -112,7 +117,9 @@ export function Wheel({
           frameRef.current = window.requestAnimationFrame(tick)
           return
         }
-        timeoutRef.current = window.setTimeout(finish, settleMs)
+        setLanded(true)
+        buzz([28, 70, 48, 90, 110])
+        timeoutRef.current = window.setTimeout(finish, settleMs + landHoldMs)
       }
       frameRef.current = window.requestAnimationFrame(tick)
     }
@@ -123,6 +130,7 @@ export function Wheel({
     disabled,
     onSpinEnd,
     onSpinStart,
+    landHoldMs,
     settleMs,
     slices,
     spinMs,
@@ -144,7 +152,9 @@ export function Wheel({
   const sliceAngle = slices.length ? 360 / slices.length : 0
 
   return (
-    <div className={`wheel ${compact ? 'wheel--compact' : ''} ${animating ? 'is-spinning' : ''}`}>
+    <div
+      className={`wheel ${compact ? 'wheel--compact' : ''} ${animating ? 'is-spinning' : ''} ${landed ? 'is-landed' : ''}`}
+    >
       <div className="wheel__pointer" aria-hidden="true">
         <span />
       </div>
@@ -189,7 +199,7 @@ export function Wheel({
           onClick={spin}
           disabled={disabled || animating}
         >
-          {animating ? 'Wait for it…' : 'SPIN'}
+          {landed ? 'There it is.' : animating ? 'Wait for it…' : 'SPIN'}
         </button>
       )}
     </div>

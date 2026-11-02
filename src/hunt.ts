@@ -8,8 +8,18 @@ export type Stop = {
   note: string
   theme: ThemeName
   image?: string
+  caption?: string
   isFinale?: boolean
 }
+
+export type SongCard = {
+  id: string
+  title: string
+  artist: string
+  image: string
+}
+
+export type ChoiceIcon = 'note' | 'photo'
 
 export type ChoiceOption = {
   id: string
@@ -20,6 +30,7 @@ export type ChoiceOption = {
   afterTitle: string
   afterClue: string
   afterNote: string
+  icon?: ChoiceIcon
 }
 
 /**
@@ -45,29 +56,41 @@ export const hunt = {
   } satisfies Record<ThemeName, string>,
   lastChoice: {
     eyebrow: 'One more',
-    title: 'Pick one',
-    lede: 'Last choice. Then look up.',
-    resultEyebrow: 'You picked',
-    options: [
+    title: 'Most played together',
+    lede: 'Tap to slide.',
+    resultEyebrow: 'It landed on',
+    afterClue: 'Put it on.',
+    afterNote: 'You know the one.',
+    songs: [
       {
-        id: 'our-song',
-        label: 'Most played song together',
-        hint: 'You know the one',
-        clue: 'Put on the most played song we have together.',
-        note: 'You both know which one.',
-        afterTitle: 'Most played song together',
-        afterClue: 'Put it on.',
-        afterNote: 'You both know which one.',
+        id: 'beauty-and-a-beat',
+        title: 'Beauty and a Beat',
+        artist: 'Justin Bieber',
+        image: '/songs/beauty-and-a-beat.jpg',
       },
       {
-        id: 'windows',
-        label: 'Windows down',
-        hint: 'The last stretch',
-        clue: 'Windows down for the last stretch.',
-        note: 'Let the air in.',
-        afterTitle: 'Windows down',
-        afterClue: 'Windows down for the last stretch.',
-        afterNote: 'Let the air in.',
+        id: 'lonely-east-texas',
+        title: 'Lonely East Texas Nights',
+        artist: 'Whiskey Myers',
+        image: '/songs/lonely-east-texas.jpg',
+      },
+      {
+        id: 'wagon-wheel',
+        title: 'Wagon Wheel',
+        artist: 'Darius Rucker',
+        image: '/songs/wagon-wheel.jpg',
+      },
+      {
+        id: 'five-to-nine',
+        title: '5 to 9',
+        artist: 'Hudson Westbrook',
+        image: '/songs/5-to-9.jpg',
+      },
+      {
+        id: 'house-again',
+        title: 'House Again',
+        artist: 'Hudson Westbrook',
+        image: '/songs/house-again.jpg',
       },
     ],
   },
@@ -84,6 +107,7 @@ export const hunt = {
         id: 'aux',
         label: 'Aux',
         hint: 'A song',
+        icon: 'note' as const,
         clue: 'Put a song on the aux.',
         note: 'Your pick. The whole ride hears it.',
         afterTitle: 'Utter silence',
@@ -94,6 +118,7 @@ export const hunt = {
         id: 'photo',
         label: 'A photo',
         hint: 'Right now',
+        icon: 'photo' as const,
         clue: 'Take a picture before we leave.',
         note: 'Something we can keep from tonight.',
         afterTitle: 'Utter silence',
@@ -115,10 +140,11 @@ export const hunt = {
       id: 'memory',
       wheelLabel: 'A familiar place',
       title: 'A familiar place',
-      clue: 'Go back to where this started. "Was this a date or a hangout?"',
+      clue: 'Go back to where this started.',
       note: "This one isn't random.",
       theme: 'memory',
       image: '/familiar-place.png',
+      caption: 'Was this a date or a hangout?',
     },
     {
       id: 'hers',
