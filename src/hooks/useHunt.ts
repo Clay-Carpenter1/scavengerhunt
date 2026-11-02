@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { hunt, type ChoiceOption } from '../hunt'
+import { hunt, type ChoiceOption, type ThemeName } from '../hunt'
 import { buildSlices } from '../slices'
 import {
   clearHunt,
@@ -41,7 +41,7 @@ export function useHunt() {
   const selectedLastChoice = hunt.lastChoice.options.find(
     (option) => option.id === lastChoiceId,
   )
-  const theme =
+  const theme: ThemeName =
     phase === 'intro'
       ? 'playful'
       : phase === 'choice' || phase === 'choiceResult'

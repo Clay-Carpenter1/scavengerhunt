@@ -51,11 +51,3 @@ export function buildSlices(stepIndex: number, stops: Stop[]): WheelSlice[] {
 
   return shuffle(slices)
 }
-
-export function buildYesSlices(): WheelSlice[] {
-  return hunt.coyYesLabels.map((label, index) => ({
-    id: `yes-${index}`,
-    label,
-    kind: 'yes' as const,
-  }))
-}
