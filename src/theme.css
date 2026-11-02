@@ -1,0 +1,105 @@
+:root {
+  --bg: #ffe8f3;
+  --bg-2: #fff4c8;
+  --ink: #3b1c32;
+  --muted: #7a4d66;
+  --accent: #ff3d7f;
+  --accent-ink: #fff;
+  --card: rgba(255, 255, 255, 0.86);
+  --card-ink: #3b1c32;
+  --line: rgba(59, 28, 50, 0.12);
+  --gold: #d4b36a;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Fredoka', 'Trebuchet MS', sans-serif;
+  --radius: 28px;
+  --slice-1: #ff6b9d;
+  --slice-2: #ffd93d;
+  --slice-3: #6ecbff;
+  --slice-4: #ff8fab;
+  --slice-5: #c5f467;
+  --slice-6: #ffa45c;
+  --slice-7: #d4a5ff;
+  --slice-8: #7af0c5;
+}
+
+html[data-theme='playful'] {
+  --bg: #ffe3f0;
+  --bg-2: #fff6c2;
+  --ink: #3b1c32;
+  --muted: #7a4d66;
+  --accent: #ff3d7f;
+  --accent-ink: #fff;
+  --card: rgba(255, 255, 255, 0.88);
+}
+
+html[data-theme='warm'] {
+  --bg: #ffe4d4;
+  --bg-2: #ffc9b5;
+  --ink: #3d2218;
+  --muted: #8a5344;
+  --accent: #ff6b4a;
+  --accent-ink: #fff;
+  --slice-1: #ff8a65;
+  --slice-2: #ffcc80;
+  --slice-3: #ff6b4a;
+  --slice-4: #ffd3c2;
+  --slice-5: #f4a261;
+  --slice-6: #e76f51;
+  --slice-7: #ffb4a2;
+  --slice-8: #ffd97d;
+}
+
+html[data-theme='memory'] {
+  --bg: #f8e6ea;
+  --bg-2: #efd0d8;
+  --ink: #3a1f28;
+  --muted: #7d4d5a;
+  --accent: #c45c74;
+  --accent-ink: #fff;
+  --slice-1: #e7a1b0;
+  --slice-2: #f3d1d8;
+  --slice-3: #c45c74;
+  --slice-4: #f7e6c4;
+  --slice-5: #d48498;
+  --slice-6: #f0c4b8;
+  --slice-7: #b75d71;
+  --slice-8: #ead5c0;
+}
+
+html[data-theme='romantic'] {
+  --bg: #f3dce2;
+  --bg-2: #e8c4c8;
+  --ink: #3a1522;
+  --muted: #7a3d4e;
+  --accent: #9b2d4a;
+  --accent-ink: #fff;
+  --gold: #c9a227;
+  --slice-1: #9b2d4a;
+  --slice-2: #e8c4c8;
+  --slice-3: #c9a227;
+  --slice-4: #d48498;
+  --slice-5: #6b1d33;
+  --slice-6: #f6e6ea;
+  --slice-7: #b4532a;
+  --slice-8: #f0d4a8;
+}
+
+html[data-theme='finale'] {
+  --bg: #2a121c;
+  --bg-2: #4a1c2c;
+  --ink: #f7efe4;
+  --muted: #e4cfc0;
+  --accent: #d4b36a;
+  --accent-ink: #2a121c;
+  --card: rgba(247, 239, 228, 0.94);
+  --card-ink: #3a1522;
+  --line: rgba(247, 239, 228, 0.16);
+  --slice-1: #6b1d33;
+  --slice-2: #d4b36a;
+  --slice-3: #8b2d44;
+  --slice-4: #f7efe4;
+  --slice-5: #4a1c2c;
+  --slice-6: #c9a227;
+  --slice-7: #9b2d4a;
+  --slice-8: #e8c4c8;
+}

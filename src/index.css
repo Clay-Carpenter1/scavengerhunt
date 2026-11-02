@@ -1,0 +1,50 @@
+@import './theme.css';
+
+:root {
+  color-scheme: light;
+  font-family: var(--sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 800px at 50% -10%, var(--bg-2), transparent 55%),
+    linear-gradient(180deg, var(--bg), var(--bg-2) 140%);
+  transition:
+    background 700ms ease,
+    color 700ms ease;
+}
+
+button,
+h1,
+h2,
+h3,
+p,
+blockquote {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+#root {
+  width: 100%;
+}

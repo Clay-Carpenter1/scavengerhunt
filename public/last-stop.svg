@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" fill="none">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="48%" r="58%">
+      <stop offset="0%" stop-color="#ffd56a" />
+      <stop offset="55%" stop-color="#f08a1a" />
+      <stop offset="100%" stop-color="#c45a0a" />
+    </radialGradient>
+    <radialGradient id="skin" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#ff9a2e" />
+      <stop offset="55%" stop-color="#e36a0d" />
+      <stop offset="100%" stop-color="#a84308" />
+    </radialGradient>
+    <filter id="carve" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.4" />
+    </filter>
+  </defs>
+
+  <path d="M98 46c2-18 14-28 26-22-8 8-10 18-12 28l-14-6z" fill="#3f6a28" />
+  <path d="M94 48c-4-16-16-22-22-12 8 6 14 14 18 24l4-12z" fill="#2f531f" />
+  <path d="M93 44c4-8 10-6 12 2 2 7-1 16-4 24-5-8-8-16-8-26z" fill="#5a8a36" />
+
+  <ellipse cx="50" cy="128" rx="34" ry="58" fill="url(#skin)" />
+  <ellipse cx="150" cy="128" rx="34" ry="58" fill="url(#skin)" />
+  <ellipse cx="72" cy="124" rx="40" ry="66" fill="url(#skin)" />
+  <ellipse cx="128" cy="124" rx="40" ry="66" fill="url(#skin)" />
+  <ellipse cx="100" cy="122" rx="50" ry="72" fill="url(#glow)" />
+
+  <path d="M100 52c-8 28-10 58-10 86 0 22 3 46 10 64 7-18 10-42 10-64 0-28-2-58-10-86z" stroke="#8a3208" stroke-width="3" stroke-linecap="round" opacity=".35" />
+  <path d="M74 60c-6 26-8 52-6 78 2 20 7 40 14 54" stroke="#8a3208" stroke-width="2.5" stroke-linecap="round" opacity=".28" />
+  <path d="M126 60c6 26 8 52 6 78-2 20-7 40-14 54" stroke="#8a3208" stroke-width="2.5" stroke-linecap="round" opacity=".28" />
+  <path d="M52 78c-4 22-4 44 2 66 4 16 12 30 20 40" stroke="#7a2c06" stroke-width="2" stroke-linecap="round" opacity=".22" />
+  <path d="M148 78c4 22 4 44-2 66-4 16-12 30-20 40" stroke="#7a2c06" stroke-width="2" stroke-linecap="round" opacity=".22" />
+
+  <g fill="#2a1206" filter="url(#carve)">
+    <path d="M56 82l26 28c2 2 1 5-1 6l-4 3c-2 2-5 1-7-1L50 90c-2-2-1-5 1-6l5-2z" />
+    <path d="M82 82L56 110c-2 2-5 2-7 0l-3-4c-2-2-1-5 1-7l26-28c2-2 5-1 7 1l2 4c2 2 1 5-1 6z" />
+    <path d="M118 82l26 28c2 2 1 5-1 6l-4 3c-2 2-5 1-7-1l-20-28c-2-2-1-5 1-6l5-2z" />
+    <path d="M144 82l-26 28c-2 2-5 2-7 0l-3-4c-2-2-1-5 1-7l26-28c2-2 5-1 7 1l2 4c2 2 1 5-1 6z" />
+  </g>
+  <g fill="#ffe08a">
+    <path d="M59 86l21 22-4 4-21-23z" />
+    <path d="M80 86l-21 22-4-3 21-23z" />
+    <path d="M121 86l21 22-4 4-21-23z" />
+    <path d="M142 86l-21 22-4-3 21-23z" />
+  </g>
+
+  <g fill="#2a1206">
+    <ellipse cx="56" cy="148" rx="7.5" ry="16" transform="rotate(-22 56 148)" />
+    <ellipse cx="72" cy="152" rx="6.5" ry="13" transform="rotate(-10 72 152)" />
+    <ellipse cx="86" cy="154" rx="6" ry="11" />
+    <ellipse cx="100" cy="155" rx="6.5" ry="14" />
+    <ellipse cx="114" cy="154" rx="6" ry="11" />
+    <ellipse cx="128" cy="152" rx="6.5" ry="13" transform="rotate(10 128 152)" />
+    <ellipse cx="144" cy="148" rx="7.5" ry="16" transform="rotate(22 144 148)" />
+  </g>
+  <g fill="#ffe08a">
+    <ellipse cx="56" cy="148" rx="4.6" ry="11.5" transform="rotate(-22 56 148)" />
+    <ellipse cx="72" cy="152" rx="3.9" ry="9.2" transform="rotate(-10 72 152)" />
+    <ellipse cx="86" cy="154" rx="3.6" ry="7.6" />
+    <ellipse cx="100" cy="155" rx="3.9" ry="10" />
+    <ellipse cx="114" cy="154" rx="3.6" ry="7.6" />
+    <ellipse cx="128" cy="152" rx="3.9" ry="9.2" transform="rotate(10 128 152)" />
+    <ellipse cx="144" cy="148" rx="4.6" ry="11.5" transform="rotate(22 144 148)" />
+  </g>
+</svg>
