@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Backdrop } from './components/Backdrop'
 import { ChoiceGrid } from './components/ChoiceGrid'
 import { DoneScreen } from './components/DoneScreen'
 import { Intro } from './components/Intro'
@@ -63,7 +64,7 @@ function App() {
 
   return (
     <div className="app">
-      <div className="glow" aria-hidden="true" />
+      <Backdrop />
       <header className="top">
         <div className="top-slot">
           {huntState.phase !== 'intro' && (

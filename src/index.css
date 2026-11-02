@@ -1,7 +1,7 @@
 @import './theme.css';
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   font-family: var(--sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,10 +22,8 @@ body,
 body {
   margin: 0;
   min-width: 320px;
-  color: var(--ink);
-  background:
-    radial-gradient(1200px 800px at 50% -10%, var(--bg-2), transparent 55%),
-    linear-gradient(180deg, var(--bg), var(--bg-2) 140%);
+  color: #f7efe8;
+  background: #070014;
   transition:
     background 700ms ease,
     color 700ms ease;
