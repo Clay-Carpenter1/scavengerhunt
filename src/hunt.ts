@@ -32,6 +32,7 @@ export type ChoiceOption = {
   afterNote: string
   icon?: ChoiceIcon
   camera?: boolean
+  appUrl?: string
 }
 
 /**
@@ -117,6 +118,7 @@ export const hunt = {
         icon: 'note' as const,
         clue: 'Put a song on the aux.',
         note: 'Your pick. The whole ride hears it.',
+        appUrl: 'spotify://',
         afterTitle: 'Utter silence',
         afterClue: 'Put the song on. Then no talking while we go to the next destination.',
         afterNote: 'The song can play. You cannot.',

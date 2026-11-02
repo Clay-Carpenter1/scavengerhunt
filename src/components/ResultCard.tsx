@@ -6,9 +6,16 @@ type ResultCardProps = {
   eyebrow?: string
   onDone: () => void
   camera?: boolean
+  appUrl?: string
 }
 
-export function ResultCard({ stop, eyebrow, onDone, camera = false }: ResultCardProps) {
+export function ResultCard({
+  stop,
+  eyebrow,
+  onDone,
+  camera = false,
+  appUrl,
+}: ResultCardProps) {
   const [shot, setShot] = useState<string | null>(null)
   const isSvg = Boolean(stop.image?.endsWith('.svg'))
   const isPolaroid = Boolean(stop.image && !isSvg)
@@ -27,10 +34,37 @@ export function ResultCard({ stop, eyebrow, onDone, camera = false }: ResultCard
 
   return (
     <section
-      className={`panel result${isPolaroid || camera ? ' result--prize' : ''}`}
+      className={`panel result${isPolaroid || camera || appUrl ? ' result--prize' : ''}`}
       role="dialog"
       aria-labelledby="result-title"
     >
+      {appUrl && (
+        <a className="polaroid polaroid--camera" href={appUrl}>
+          <span className="camera-well">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <ellipse cx="14" cy="34" rx="6.2" ry="4.6" transform="rotate(-22 14 34)" fill="currentColor" />
+              <ellipse cx="30.5" cy="30.5" rx="6.2" ry="4.6" transform="rotate(-22 30.5 30.5)" fill="currentColor" />
+              <path
+                d="M19.2 33.2V12.5l17.3-3.8v20.8"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M19.2 12.5h17.3"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4.4"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span>Open Spotify</span>
+          </span>
+        </a>
+      )}
+
       {camera && (
         <label className="polaroid polaroid--camera">
           <input

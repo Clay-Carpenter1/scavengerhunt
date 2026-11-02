@@ -822,6 +822,8 @@
   position: relative;
   display: block;
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
 }
 
 .camera-input {

@@ -143,6 +143,7 @@ function App() {
             lede={hunt.choice.lede}
             options={hunt.choice.options}
             onPick={(option) => {
+              if (option.appUrl) window.location.assign(option.appUrl)
               setDirection('forward')
               huntState.pickChoice(option)
             }}
@@ -161,6 +162,7 @@ function App() {
             }}
             eyebrow={`${hunt.choice.resultEyebrow} ${huntState.selectedChoice.label.toLowerCase()}`}
             camera={huntState.selectedChoice.camera}
+            appUrl={huntState.selectedChoice.appUrl}
             onDone={() => {
               setDirection('forward')
               huntState.completeChoice()
