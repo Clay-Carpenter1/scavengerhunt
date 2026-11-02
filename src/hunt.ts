@@ -134,7 +134,7 @@ export const hunt = {
       wheelLabel: '???',
       title: 'Go back',
       clue: '.',
-      note: 'Go back to the place that looks like this.',
+      note: 'Go back to the object that looks like this.',
       theme: 'finale',
       image: '/last-stop.svg',
     },
