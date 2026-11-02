@@ -42,8 +42,12 @@ export function Backdrop() {
 
     const resize = () => {
       const ratio = Math.min(window.devicePixelRatio || 1, 2)
-      canvas.width = Math.floor(window.innerWidth * ratio)
-      canvas.height = Math.floor(window.innerHeight * ratio)
+      const cssWidth = window.innerWidth
+      const cssHeight = window.innerHeight
+      canvas.style.width = `${cssWidth}px`
+      canvas.style.height = `${cssHeight}px`
+      canvas.width = Math.floor(cssWidth * ratio)
+      canvas.height = Math.floor(cssHeight * ratio)
     }
 
     const paint = (time: number) => {

@@ -173,7 +173,6 @@ export function Wheel({
     return () => window.cancelAnimationFrame(frame)
   }, [autoSpin, spin])
 
-  const size = compact ? 220 : 320
   const cx = 100
   const cy = 100
   const radius = 98
@@ -188,7 +187,7 @@ export function Wheel({
       </div>
       <div className="wheel__idle">
         <div ref={discRef} className="wheel__disc">
-          <svg viewBox="0 0 200 200" width={size} height={size} role="img" aria-label="Spin wheel">
+          <svg viewBox="0 0 200 200" role="img" aria-label="Spin wheel">
             {slices.map((slice, index) => {
               const start = index * sliceAngle
               const end = start + sliceAngle
